@@ -82,8 +82,7 @@ def save_analysis(file_name, skills, file_hash):
     return saved
 
 
-# Initialize database
-initialize_database()
+
 
 
 st.set_page_config(
@@ -91,6 +90,8 @@ st.set_page_config(
     page_icon="🎓",
     layout="wide"
 )
+# Initialize database
+initialize_database()
 
 
 # Technical skills
@@ -258,9 +259,20 @@ if "detected_skills" not in st.session_state:
     st.session_state.detected_skills = []
 
 
+
 # Professional application styling
 st.markdown("""
 <style>
+
+/* Main application */
+.block-container {
+    width: 100%;
+    max-width: 1400px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Sidebar */
 [data-testid="stSidebar"] {
     background-color: #102A43;
 }
@@ -269,14 +281,55 @@ st.markdown("""
     color: white !important;
 }
 
+[data-testid="stSidebar"] [data-baseweb="select"] {
+    background-color: white;
+    border-radius: 8px;
+}
+
+/* Main heading */
 h1 {
     color: #173B65;
 }
+
+/* Responsive tablet and mobile layout */
+@media (max-width: 768px) {
+    .block-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 1rem;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+}
+
+/* Small mobile screens */
+@media (max-width: 480px) {
+    .block-container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
 </style>
 """, unsafe_allow_html=True)
 
+
 st.title("AI-Powered Career Readiness System")
 
+
+
+
+# Sidebar Navigation
 st.sidebar.markdown("""
 <div style="text-align: center; padding: 15px 5px;">
     <h2 style="color: #FFFFFF; font-size: 25px;">
@@ -298,6 +351,9 @@ menu = st.sidebar.selectbox(
         "Analysis History"
     ]
 )
+
+
+
 
 
 # Dashboard
@@ -346,28 +402,65 @@ if menu == "Dashboard":
     </div>
     """, unsafe_allow_html=True)
 
+   
     # Dashboard styling
     st.markdown("""
-        <style>
+    <style>
+
+    /* Dashboard metric cards */
+    div[data-testid="stMetric"] {
+        background-color: #F0F5FF !important;
+        border: 1px solid #D6E4FF;
+        padding: 18px 16px;
+        border-radius: 12px;
+        min-width: 0;
+    }
+
+    /* Skill chips */
+    .skill-chip {
+        display: inline-block;
+        background-color: #E8F1FF;
+        color: #174EA6;
+        padding: 8px 14px;
+        margin: 5px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    /* Tablet and mobile */
+    @media (max-width: 768px) {
         div[data-testid="stMetric"] {
-            background-color: #F0F5FF;
-            border: 1px solid #D6E4FF;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 14px 12px;
+        }
+
+        div[data-testid="stMetricValue"] {
+            font-size: 1.35rem;
         }
 
         .skill-chip {
-            display: inline-block;
-            background-color: #E8F1FF;
-            color: #174EA6;
-            padding: 8px 14px;
-            margin: 5px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 12px;
+            padding: 6px 10px;
+            margin: 3px;
         }
-        </style>
+    }
+
+    /* Small mobile */
+    @media (max-width: 480px) {
+        div[data-testid="stMetric"] {
+            padding: 12px 10px;
+        }
+
+        div[data-testid="stMetricValue"] {
+            font-size: 1.2rem;
+        }
+    }
+
+    </style>
     """, unsafe_allow_html=True)
+
 
     # Dashboard metrics
     col1, col2, col3 = st.columns(3)
