@@ -1,12 +1,14 @@
 import re
+import os
 import pymupdf
 import pytesseract
 import io
 from PIL import Image
 
-pytesseract.pytesseract.tesseract_cmd = (
-    r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-)
+if os.name == "nt":
+    pytesseract.pytesseract.tesseract_cmd = (
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    )
 
 def detect_skills(resume_text, skill_list):
     detected = []
