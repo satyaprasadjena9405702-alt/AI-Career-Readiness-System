@@ -30,9 +30,7 @@ import pandas as pd
 import sqlite3
 import hashlib
 from datetime import datetime
-pytesseract.pytesseract.tesseract_cmd = (
-    r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-)
+
 
 # Database file
 DB_NAME = "career_readiness.db"
