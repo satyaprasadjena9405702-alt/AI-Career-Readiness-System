@@ -1,3 +1,4 @@
+import base64
 import pytesseract
 from utils import (
     detect_skills,
@@ -30,6 +31,13 @@ import pandas as pd
 import sqlite3
 import hashlib
 from datetime import datetime
+def get_base64_image(image_path):
+
+    with open(image_path, "rb") as image_file:
+
+        return base64.b64encode(
+            image_file.read()
+        ).decode()
 
 
 # Database file
@@ -319,6 +327,37 @@ h1 {
         font-size: 1.5rem;
     }
 }
+/* Job recommendation progress animation */
+@keyframes careerProgressFade {
+    from {
+        opacity: 0;
+        transform: scaleX(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+div[data-testid="stProgress"] {
+    animation: careerProgressFade 0.8s ease-out;
+    transform-origin: left;
+}
+/* Main title animation */
+@keyframes titleFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    animation: titleFadeIn 0.8s ease-out;
+}
 
 </style>
 """, unsafe_allow_html=True)
@@ -384,13 +423,28 @@ if menu == "Dashboard":
 
     st.header("Career Dashboard")
 
-    st.markdown("""
+    
+    # Load local AI background image
+    background_image = get_base64_image(
+        "assets/ai_background.png"
+    )
+
+    st.markdown(f"""
     <div style="
-        background: linear-gradient(120deg, #173B65, #2878B5);
+        background-image:
+            linear-gradient(
+                120deg,
+                rgba(16, 42, 67, 0.90),
+                rgba(23, 91, 145, 0.78)
+            ),
+            url('data:image/png;base64,{background_image}');
+        background-size: cover;
+        background-position: center;
         padding: 25px;
         border-radius: 12px;
         color: white;
         margin-bottom: 20px;
+        box-shadow: 0 4px 14px rgba(23, 59, 101, 0.15);
     ">
         <h2 style="color: white; margin-bottom: 8px;">
             Welcome to CareerAI!
@@ -401,6 +455,7 @@ if menu == "Dashboard":
         </p>
     </div>
     """, unsafe_allow_html=True)
+
 
    
     # Dashboard styling
@@ -415,6 +470,16 @@ if menu == "Dashboard":
         border-radius: 12px;
         min-width: 0;
     }
+    /* Improve metric card text visibility */
+div[data-testid="stMetricLabel"],
+div[data-testid="stMetricLabel"] * {
+    color: #173B65 !important;
+}
+
+div[data-testid="stMetricValue"],
+div[data-testid="stMetricValue"] * {
+    color: #102A43 !important;
+}
 
     /* Skill chips */
     .skill-chip {
@@ -429,6 +494,19 @@ if menu == "Dashboard":
         max-width: 100%;
         overflow-wrap: anywhere;
     }
+      
+
+    /* ADD NEW CODE HERE */
+    .skill-chip {
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .skill-chip:hover {
+        transform: translateY(-3px);
+        background-color: #D6E8FF;
+    }
+
+   
 
     /* Tablet and mobile */
     @media (max-width: 768px) {
@@ -457,6 +535,30 @@ if menu == "Dashboard":
             font-size: 1.2rem;
         }
     }
+        /* Dashboard card fade-in animation */
+    @keyframes careerFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    div[data-testid="stMetric"] {
+        animation: careerFadeIn 0.7s ease-out;
+    }
+    /* Dashboard metric hover effect */
+div[data-testid="stMetric"] {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+div[data-testid="stMetric"]:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(23, 59, 101, 0.12);
+}
 
     </style>
     """, unsafe_allow_html=True)
@@ -595,9 +697,11 @@ elif menu == "Resume Analyzer":
 
         try:
 
-            resume_text = extract_resume_text(
-                uploaded_file.getvalue()
-            )
+            with st.spinner("🤖 CareerAI is analyzing your resume..."):
+
+                resume_text = extract_resume_text(
+                    uploaded_file.getvalue()
+                )
 
             if validate_resume_text(resume_text):
 
