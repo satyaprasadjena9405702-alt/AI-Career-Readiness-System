@@ -390,6 +390,8 @@ menu = st.sidebar.selectbox(
         "Analysis History"
     ]
 )
+if "next_page" in st.session_state:
+    menu = st.session_state.pop("next_page")
 
 
 
@@ -649,6 +651,10 @@ div[data-testid="stMetric"]:hover {
                 "Discover career opportunities that match your skills."
             )
 
+            if st.button("Explore Now", key="explore_jobs"):
+                st.session_state["next_page"] = "Job Recommendations"
+                st.rerun()
+
     with col2:
         with st.container(border=True):
             st.markdown("### 🎯")
@@ -657,6 +663,10 @@ div[data-testid="stMetric"]:hover {
                 "Find missing skills and understand what you need to learn."
             )
 
+            if st.button("Explore Now", key="explore_skill_gaps"):
+                st.session_state["next_page"] = "Skill Gap Analysis"
+                st.rerun()
+
     with col3:
         with st.container(border=True):
             st.markdown("### 📄")
@@ -664,6 +674,13 @@ div[data-testid="stMetric"]:hover {
             st.write(
                 "Generate a PDF report with your career analysis."
             )
+
+            if st.button("Generate Report", key="generate_career_report"):
+                if not st.session_state.resume_text:
+                    st.warning("Please analyze your resume first.")
+                else:
+                    st.session_state["next_page"] = "Skill Gap Analysis"
+                    st.rerun()
 
 
 
