@@ -471,8 +471,8 @@ if menu == "Dashboard":
         min-width: 0;
     }
     /* Improve metric card text visibility */
-div[data-testid="stMetricLabel"],
-div[data-testid="stMetricLabel"] * {
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] * {
     color: #173B65 !important;
 }
 
